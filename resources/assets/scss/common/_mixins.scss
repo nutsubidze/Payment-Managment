@@ -1,0 +1,119 @@
+/* Some Mixins */
+@mixin border-radius($radius) {
+  -webkit-border-radius: $radius !important;
+  -moz-border-radius: $radius !important;
+  -ms-border-radius: $radius !important;
+  border-radius: $radius !important;
+}
+@mixin border-radius-top($radius) {
+  -webkit-border-top-left-radius: $radius !important;
+  -webkit-border-top-right-radius: $radius !important;
+  -moz-border-radius-topleft: $radius !important;
+  -moz-border-radius-topright: $radius !important;
+  border-top-left-radius: $radius !important;
+  border-top-right-radius: $radius !important;
+}
+@mixin border-top-left($radius){
+  -webkit-border-top-left-radius: $radius;
+  -moz-border-radius-topleft: $radius;
+  border-top-left-radius: $radius;
+}
+@mixin border-radius-bottom($radius) {
+  -webkit-border-bottom-left-radius: $radius !important;
+  -webkit-border-bottom-right-radius: $radius !important;
+  -moz-border-radius-bottomleft: $radius !important;
+  -moz-border-radius-bottomright: $radius !important;
+  border-bottom-left-radius: $radius !important;
+  border-bottom-right-radius: $radius !important;
+}
+@mixin box-shadow($top, $left, $blur, $color, $inset:"") {
+  -webkit-box-shadow:$top $left $blur $color #{$inset};
+  -moz-box-shadow:$top $left $blur $color #{$inset};
+  box-shadow:$top $left $blur $color #{$inset};
+}
+
+@mixin transformbox($left, $right){
+  -webkit-transform: translate($left, $right);
+  -moz-transform: translate($left, $right);
+  -ms-transform: translate($left, $right);
+  -o-transform: translate($left, $right);
+  transform: translate($left, $right);
+}
+@mixin translate_center($left, $right){
+  top:$left;
+ 
+  left:$right;
+  -webkit-transform : translate(-50%, -50%);
+  -moz-transform    : translate(-50%, -50%);
+  -ms-transform     : translate(-50%, -50%);
+  -o-transform      : translate(-50%, -50%);
+  transform         : translate(-50%, -50%);
+}
+@mixin top_bot_grad($top, $bot, $def) {
+  background: $def; /* For browsers that do not support gradients */
+  background: -webkit-linear-gradient($top, $bot); /* For Safari 5.1 to 6.0 */
+  background: -o-linear-gradient($top, $bot); /* For Opera 11.1 to 12.0 */
+  background: -moz-linear-gradient($top, $bot); /* For Firefox 3.6 to 15 */
+  background: linear-gradient($top, $bot); /* Standard syntax (must be last) */
+}
+@mixin csstransition($sec, $transition){
+  -webkit-transition: all $sec $transition;
+  -moz-transition: all $sec $transition;
+  -o-transition: all $sec $transition;
+  -ms-transition: all $sec $transition;
+  transition: all $sec $transition;
+}
+@-webkit-keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+@-moz-keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+@keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+
+@-webkit-keyframes lineWidth { from { width:20px; margin-left: -10px;  } to { width:100px; margin-left: -50px; } }
+@-moz-keyframes lineWidth { from { width:20px; margin-left: -10px; } to { width:100px; margin-left: -50px;  } }
+@keyframes lineWidth { from { width:20px; margin-left: -10px; } to { width:100px; margin-left: -50px;  } }
+
+@mixin fade-in($duration, $ease){
+  opacity:0;  /* make things invisible upon start */
+  -webkit-animation:fadeIn $ease 1;  /* call our keyframe named fadeIn, use animattion ease-in and repeat it only 1 time */
+  -moz-animation:fadeIn $ease 1;
+  animation:fadeIn $ease 1;
+
+  -webkit-animation-fill-mode:forwards;  /* this makes sure that after animation is done we remain at the last keyframe value (opacity: 1)*/
+  -moz-animation-fill-mode:forwards;
+  animation-fill-mode:forwards;
+
+  -webkit-animation-duration:$duration;
+  -moz-animation-duration:$duration;
+  animation-duration:$duration;
+}
+
+@mixin line-width($duration, $ease){
+  width:20px;
+  margin-left: -10px;
+
+  -webkit-animation:lineWidth $ease 1;  /* call our keyframe named fadeIn, use animattion ease-in and repeat it only 1 time */
+  -moz-animation:lineWidth $ease 1;
+  animation:lineWidth $ease 1;
+
+  -webkit-animation-fill-mode:forwards;  /* this makes sure that after animation is done we remain at the last keyframe value (opacity: 1)*/
+  -moz-animation-fill-mode:forwards;
+  animation-fill-mode:forwards;
+
+  -webkit-animation-duration:$duration;
+  -moz-animation-duration:$duration;
+  animation-duration:$duration;
+}
+@mixin textstyle(){
+  color: $light-black;
+  font-size: 16px;
+  font-family: "Helvetica Neue Greek Light", serif;
+  strong {
+    font-family: "Helvetica Neue Greek Bold", serif;
+    font-weight: normal;
+  }
+  a{
+    font-family: "Helvetica Neue Greek", serif
+  }
+  p{
+    margin-bottom: 0px;
+  }
+} 

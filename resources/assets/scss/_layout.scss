@@ -1,0 +1,655 @@
+
+* {
+  outline: none;
+}
+
+body {
+  background-color: $lightBlue;
+
+  .pop-up {
+    background-color: rgba(41, 45, 75, 0.65);
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    display: none;
+    overflow: auto;
+    z-index: 9;
+
+    .item {
+      width: 100%;
+      height: auto;
+      float: left;
+      background-color: white;
+      margin-top: 10%;
+      @media only screen and (max-width: 990px) {
+        padding: 25px;
+      }
+      .item--title {
+        color: #727588;
+        font-size: 15px;
+        letter-spacing: 0.8px;
+        font-family: 'Open Sans', sans-serif;
+        float: left;
+        padding: 16px 14px 16px 14px;
+      }
+
+      .close--btn{
+        cursor: pointer;
+        padding: 16px 14px 16px 14px;
+      }
+
+
+      .form--layout {
+        float: left;
+        width: 100%;
+        margin-bottom: 25px;
+        margin-top: 20px;
+        position: relative;
+        border: 1px solid #bec2da;
+        border-radius: 5px;
+        padding: 15px;
+
+        .error-msg{
+          display: none;
+        }
+
+        select {
+          width: 100%;
+          background-color: white;
+          border: none;
+          text-indent: 15px;
+          color: #bec2da;
+          top:15px;
+          font-size: 13px;
+          letter-spacing: 0.8px;
+          font-family: 'Open Sans', sans-serif;
+        }
+
+        p {
+          position: absolute;
+          top: -25px;
+          color: #a1c4ff;
+          font-size: 13px;
+          left: 0px;
+          letter-spacing: 0.8px;
+          font-family: 'Open Sans', sans-serif;
+        }
+
+        input {
+          float: left;
+          width: 100%;
+          border: none;
+          color: #a1c4ff;
+          letter-spacing: 0.8px;
+          font-family: 'Open Sans', sans-serif;
+
+        }
+
+        textarea {
+          float: left;
+          width: 100%;
+          min-height: 60px;
+          border: none;
+          color: #a1c4ff;
+          letter-spacing: 0.8px;
+          font-family: 'Open Sans', sans-serif;
+
+        }
+      }
+
+      .error{
+        border: 1px solid red;
+        p{
+          color: red;
+        }
+
+        input{
+          border: red;
+        }
+        .error-msg{
+          display: block;
+          top: 100%;
+          position: absolute;
+          font-size: 10px;
+          padding-top: 5px;
+        }
+      }
+
+
+      .btn--create{
+        color: white;
+        background-color: #a1c4ff;
+        padding-left: 25px;
+        padding-right: 25px;
+        text-transform: uppercase;
+        margin-bottom: 15px;
+        font-size: 16px;
+        @include border-radius-bottom(5px);
+        @include border-radius-top(5px);
+      }
+
+    }
+
+  }
+
+  //global elements >>>>>
+  .btn {
+    float: left;
+    padding: 8px 14px 8px 14px;
+    font-size: 13px;
+    @include border-radius-bottom(20px);
+    @include border-radius-top(20px);
+    letter-spacing: 0.8px;
+    font-family: 'Open Sans', sans-serif;
+  }
+
+  .icon {
+    float: left;
+    height: 34px;
+    width: 34px;
+    background-size: contain;
+    background-position: center center;
+  }
+  //global elements <<<<<<<<
+
+  //header block
+  header {
+    float: left;
+    width: 100%;
+    box-shadow: 0px 0px 13px rgba(0, 0, 0, 0.20);
+    background-color: white;
+    h1 {
+      margin: 0;
+      padding: 0;
+    }
+
+    //for header right text
+    p {
+      color: #9ba5b2;
+      font-size: 13px;
+      text-transform: lowercase;
+      padding-top: 20px;
+      letter-spacing: 0.8px;
+      font-family: 'Open Sans', sans-serif;
+
+    }
+  }
+
+  main {
+
+    //filters block
+    .filters {
+      margin-top: 32px;
+      float: left;
+      width: 100%;
+      padding: 12px 10px 12px 10px;
+      background-color: $lightGray;
+
+      //filters container for control position
+      .filters--items--container {
+        float: right;
+        .item {
+          padding-left: 20px;
+          padding-right: 20px;
+          @media only screen and (max-width: $mobile) {
+            padding-left: 15px;
+            padding-right: 15px;
+          }
+        }
+        @media only screen and (max-width: $mobile) {
+          float: left;
+        }
+      }
+
+      //filters item common styles
+      .item {
+        float: left;
+        padding: 15px 12px 15px 12px;
+        border-right: 1px solid $Gray;
+
+        @media only screen and (max-width: $mobile) {
+          width: 100%;
+          border: none !important;
+          .btn {
+            float: right;
+          }
+        }
+
+        .item-btn {
+          background-color: $DarkBlue;
+          color: white;
+        }
+
+        .item--text {
+          float: left;
+          padding-left: 15px;
+          color: $blue;
+          font-size: 11px;
+          padding-top: 10px;
+          letter-spacing: 0.8px;
+          font-family: 'Open Sans', sans-serif;
+        }
+
+        input {
+          padding-left: 15px;
+          color: $DarkGray;
+          font-size: 13px;
+          padding-top: 10px;
+          background: none;
+          border: none;
+          letter-spacing: 0.8px;
+          font-family: 'Open Sans', sans-serif;
+        }
+      }
+
+      //for only Add item
+      .item--add {
+        cursor: pointer;
+        .icon--add {
+          background-image: url("./imgs/icon__add.png");
+        }
+      }
+
+      //for only Search item
+      .item--search {
+        border-left: 1px solid $Gray;
+        .icon--search {
+          background-image: url("./imgs/icon__search.png");
+        }
+      }
+
+      //for Only extend Item
+      .item--extend {
+        border-right: none;
+      }
+    }
+
+    //exteranal Filters block
+    .extendedFilters {
+      float: left;
+      width: 100%;
+      margin-top: 15px;
+      padding-top: 10px;
+      padding-bottom: 10px;
+      background-color: $lightGray;
+      position: relative;
+
+      .triangle {
+        position: absolute;
+        right: 25px;
+        top: -10px;
+        width: 0;
+        height: 0;
+        border-style: solid;
+        border-width: 0 10.5px 12px 10.5px;
+        border-color: transparent transparent $lightGray transparent;
+      }
+
+      //common items styles
+      .item {
+        width: 30%;
+        float: left;
+        padding-left: 15px;
+        padding-right: 15px;
+        padding-top: 8px;
+        padding-bottom: 8px;
+
+        @media only screen and (max-width: $mobile) {
+          width: 100% !important;
+          border: none;
+          padding-left: 15px !important;
+          padding-right: 15px !important;
+        }
+
+        h2 {
+          color: $DarkGray;
+          font-size: 13px;
+          letter-spacing: 0.8px;
+          font-family: 'Open Sans', sans-serif;
+          margin: 0;
+          padding: 0;
+          padding-left: 5px;
+          margin-bottom: 8px;
+        }
+
+        input {
+          width: 100%;
+          float: left;
+          font-size: 13px;
+          color: $DarkGray;
+          border-radius: 5px;
+          margin-top: 10px;
+          margin-bottom: 12px;
+          border: 0.5px solid #c2c6dc;
+          letter-spacing: 0.8px;
+          font-family: 'Open Sans', sans-serif;
+          padding: 8px 10px 8px 10px;
+          background-color: white;
+        }
+
+        .item-btn {
+          border: 1px solid $blue;
+          color: $blue;
+          margin-top: 8px;
+          margin-bottom: 8px;
+          margin-left: 5px;
+          margin-right: 5px;
+          @include csstransition(0.7s, ease);
+          &:hover {
+            background-color: $blue;
+            color: white;
+          }
+          &.active {
+            background-color: $blue;
+            color: white;
+          }
+        }
+      }
+
+      //only for category
+      .item--category {
+        width: 40%;
+      }
+
+      //only for date
+      .item--date {
+        padding-left: 30px;
+        padding-right: 30px;
+        border-right: 1px solid $Gray;
+        border-left: 1px solid $Gray;
+      }
+
+      //only for ammount
+      .item--amount {
+        padding-left: 30px;
+        padding-right: 30px;
+      }
+
+    }
+
+    //content block - for payment and charts
+    .content {
+      float: left;
+      width: 100%;
+      margin-top: 25px;
+
+      //for count records title
+      h3 {
+        font-size: 26px;
+        color: #45617e;
+        padding: 0;
+        margin: 0;
+        margin-bottom: 17px;
+        letter-spacing: 0.8px;
+        font-family: 'Open Sans', sans-serif;
+      }
+
+      //list global styles
+      .list {
+        background-color: $lightGray;
+        min-height: 554px;
+        max-height: 554px;
+        margin-bottom: 260px;
+        @media only screen and (max-width: 990px) {
+          width: 100% !important;
+          margin-bottom: 100px;
+        }
+      }
+
+      //payment list block
+      .list--payment {
+        width: 57%;
+        float: left;
+        position: relative;
+        overflow: visible;
+
+        .total{
+          width: 100%;
+          padding-top: 15px;
+          padding-bottom: 15px;
+          padding-left: 12px;
+          padding-right: 12px;
+          background-color: #a1c4ff;
+          position: absolute;
+          bottom: -75px;
+          height: 75px;
+
+          .total--text{
+            position: absolute;
+            right: 10px;
+            font-size: 14px;
+            letter-spacing: 0.8px;
+            font-family: 'Open Sans', sans-serif;
+            color: white;
+          }
+
+          .total--number{
+            position: absolute;
+            right: 10px;
+            top:35px;
+            font-size: 18px;
+            letter-spacing: 0.8px;
+            font-family: 'Open Sans', sans-serif;
+            color: white;
+          }
+        }
+
+        .items--container{
+
+          float: left;
+          width: 100%;
+          min-height: 554px;
+          max-height: 554px;
+          overflow: auto;
+
+          //for scrollbar >>>>
+          &::-webkit-scrollbar-track {
+            //-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+            border-radius: 5px;
+            //background-color: #F5F5F5;
+          }
+
+          &::-webkit-scrollbar {
+            width: 8px;
+            //background-color: #acadad;
+          }
+
+          &::-webkit-scrollbar-thumb {
+            border-radius: 5px;
+            //-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+            background-color: #acadad;
+          }
+          //for scrollbar <<<<
+
+          .list--item {
+            width: 100%;
+            float: left;
+            background-color: #f9fafb;
+            padding: 20px;
+            border-bottom: 1px solid #d2ddeb;
+            cursor: pointer;
+            @include csstransition(0.7s, ease);
+
+            &.active {
+              background-color: #f3f4f8;
+              .item--comment {
+                display: block !important;
+                //visibility: visible;
+              }
+            }
+
+            .item {
+
+            }
+
+            .item--title {
+              float: left;
+              font-size: 19px;
+              letter-spacing: 0.8px;
+              font-family: 'Open Sans', sans-serif;
+              color: #45617e;
+
+            }
+
+
+            .item--date {
+              float: right;
+              font-size: 13px;
+              color: #aaaaaa;
+              letter-spacing: 0.8px;
+              font-family: 'Open Sans', sans-serif;
+            }
+
+            .item--category {
+              float: left;
+              .item--category--btn {
+                border: 1px solid $blue;
+                color: $blue;
+                font-size: 10px;
+                margin-top: 15px;
+              }
+            }
+
+            .item--amount {
+              float: right;
+              color: #f8748c;
+              //width: 100px;
+              span {
+                float: right;
+                width: 100%;
+                text-align: right;
+                font-size: 21px;
+                letter-spacing: 0.8px;
+                font-family: 'Open Sans', sans-serif;
+                clear: both;
+                &.gel {
+                  font-size: 12px !important;
+                }
+              }
+            }
+
+            .item--comment {
+              float: left;
+              display: none;
+              //visibility: hidden;
+              width: 100%;
+              margin-top: 25px;
+              h3 {
+                margin: 0;
+                float: left;
+                width: 100%;
+                padding: 0;
+                padding-top: 8px;
+                padding-bottom: 8px;
+                color: #45617e;
+                font-size: 14px;
+                letter-spacing: 0.8px;
+                font-family: 'Open Sans', sans-serif;
+              }
+
+              p {
+                float: left;
+                width: 100%;
+                padding-top: 8px;
+                padding-bottom: 8px;
+                color: #b8b8b8;
+                font-size: 14px;
+                letter-spacing: 0.8px;
+                font-family: 'Open Sans', sans-serif;
+              }
+            }
+          }
+
+        }
+
+      }
+
+      //charts block
+      .list--chart {
+        width: 41%;
+        float: right;
+        overflow: hidden;
+
+        .list--chart--title {
+          float: left;
+          display: none;
+          font-size: 13px;
+          letter-spacing: 0.8px;
+          font-family: 'Open Sans', sans-serif;
+          color: #45617e;
+          padding: 15px;
+          margin-bottom: 10px;
+
+        }
+
+        .columns-container {
+          width: 100%;
+          float: left;
+          position: relative;
+          padding-left: 25px;
+          height: 180px;
+          display: none;
+          margin-bottom: 35px;
+
+          .column {
+            width: 6%;
+            bottom: 0;
+            height: 0px;
+            margin-left: 1%;
+            display: inline-block;
+            background-color: #a1c4ff;
+            position: absolute;
+            @include csstransition(0.7s, ease);
+
+            .date {
+              position: absolute;
+              bottom: -20px;
+              text-transform: capitalize;
+              letter-spacing: 0.8px;
+              width: 100%;
+              text-align: center;
+              font-size: 11px;
+              font-family: 'Open Sans', sans-serif;
+            }
+
+            .percent {
+              position: absolute;
+              top: -18px;
+              font-weight: bold;
+              font-size: 10px;
+              text-transform: capitalize;
+              letter-spacing: 0.8px;
+              display: none;
+              font-family: 'Open Sans', sans-serif;
+            }
+
+            &:hover {
+              background-color: #2e6da4;
+              .percent {
+                display: block;
+              }
+            }
+          }
+        }
+      }
+
+    }
+  }
+
+  footer{
+    float: left;
+    width: 100%;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    background-color: white;
+    p{
+      font-size: 13px;
+      color: #9ba5b2;
+      text-align: center;
+      letter-spacing: 0.8px;
+      font-family: 'Open Sans', sans-serif;
+    }
+  }
+
+}
+
