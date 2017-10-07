@@ -1,9 +1,9 @@
 # Payment-Managment
-SPA Payment Managment
+SPA Payment Managment : List, Categories, Charts
 
-Technologies: 
-Front : 
-  Html/Css - Preprocesor (sass/scss) with bem methodology, Libraray: bootstrap
-  Javascript/Jquery, Task Manager (Gulp.js)
-Back:
-  Php, Mysql - Framework: Laravel
+# Front-Development 
+ <p>Html/Css - Preprocesor (sass/scss) with bem methodology, Library: bootstrap</p>
+ <p> Javascript/Jquery, Task Manager (Gulp.js)</p>
+ 
+# Back-Development
+ <p> Php, Mysql - Framework: Laravel</p>
