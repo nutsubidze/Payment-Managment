@@ -40,6 +40,9 @@ class PaymentController extends Controller
                 'payments.title as title'
             );
 
+        $queryForAllPayments = $query;
+        $data['allPaymentsForOffline'] = $queryForAllPayments->get();
+
         $queryForAmount = DB::table('payments');
 
         if ($searchValue) {

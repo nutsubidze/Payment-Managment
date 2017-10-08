@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="./css/libs/bootstrap.min.css">
     <link rel="stylesheet" href="./css/libs/bootstrap-datepicker.css">
     <script src="./js/libs/bootstrap-datepicker.js"></script>
+    <script src="./js/libs/offline.js"></script>
     <link rel="stylesheet" type="text/css" href="./css/style.css"/>
     <title>Hello Bog</title>
 </head>
