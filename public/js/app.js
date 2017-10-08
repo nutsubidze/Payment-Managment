@@ -6,8 +6,13 @@ $(function () {
         $(this).addClass('active');
     });
 
+    //close pop-up and reset
     $('#closePopUp').click(function () {
         $('#popUp').fadeOut('slow');
+        $('#addTitle').val('');
+        $('#addAmount').val('');
+        $('#addDate').val('');
+        $('#addComment').val('');
     });
 
     $('#addPaymentBtn').click(function () {
@@ -45,9 +50,6 @@ $(function () {
 
     //initialize datepicker
     $('.datepicker').datepicker();
-
-
-//    Crud Ajax Operations ---------------------
 
     var month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
@@ -90,7 +92,6 @@ $(function () {
         }
 
         initChart();
-
         return column_item;
     }
 
@@ -117,62 +118,13 @@ $(function () {
         return valid;
     }
 
-    $('#createPayment').click(function (e) {
-
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-
-        e.preventDefault();
-
-        //check form valid client side
-        if (!checkCreateValidity()) {
-            return 0;
-        }
-
-        //request params
-        var formData = {
-            title: $('#addTitle').val(),
-            amount: $('#addAmount').val(),
-            date: $('#addDate').val(),
-            comment: $('#addComment').val(),
-            category_id: $('#addCategory').val(),
-        };
-
-        var type = "POST";
-        var url = '/create';
-
-        $.ajax({
-
-            type: type,
-            url: url,
-            data: formData,
-            dataType: 'json',
-            success: function (data) {
-
-                //client side rendering
-                $('#paymentList').html(generatePaymentList(data.payments));
-                $('#allMonthJs').html(generateChart(data.allMonth));
-                $('#totalNumber').html(data.filteredAmount);
-                $('#closePopUp').click();
-                initChart();
-
-            },
-            error: function (data) {
-                console.log('Error:', data);
-            }
-        });
-    });
-
     //get Categories chart data info for offline mode
     function getFilteredDataForCategoryChart(formData, data) {
         data.sort(function (a, b) {
             return new Date(b.date) - new Date(a.date);
         });
 
-        if (formData.categoryIds.length != 0) {
+        if (formData && formData.categoryIds.length != 0) {
             data = jQuery.grep(data, function (item) {
                 return formData.categoryIds.includes(item.category_id);
             });
@@ -196,7 +148,6 @@ $(function () {
             });
             allMonthInfo[i] = (totalAmountPerMonth / totalAmount) * 100;
         }
-
         return allMonthInfo;
     }
 
@@ -242,9 +193,7 @@ $(function () {
                 return new Date(item.date) >= new Date(formData.dateTo);
             });
         }
-
         return data;
-
     }
 
     //generate all data information for offline mode to rendering
@@ -252,8 +201,14 @@ $(function () {
         var allData = [];
         var filteredData = [];
         var filteredDataTotalAmount = 0;
-        var filteredDateForCategoryChart = getFilteredDataForCategoryChart(formData, data);
-        data = getFilteredDataForOfflineMode(formData, data);
+        var filteredDateForCategoryChart;
+
+        if (formData) {
+            filteredDateForCategoryChart = getFilteredDataForCategoryChart(formData, data);
+            data = getFilteredDataForOfflineMode(formData, data);
+        } else {
+            filteredDateForCategoryChart = getFilteredDataForCategoryChart('', data);
+        }
 
         data.forEach(function (item) {
 
@@ -271,6 +226,100 @@ $(function () {
         allData['filteredDateForCategoryChart'] = filteredDateForCategoryChart;
         return allData;
     }
+
+    //common ajax methods ---
+    Offline.check();
+    var syncData = [];
+    //create payment ----
+    $('#createPayment').click(function (e) {
+        //check offline status -----
+        Offline.check();
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        // e.preventDefault();
+
+        //check form valid client side
+        if (!checkCreateValidity()) {
+            return 0;
+        }
+
+        //request params
+        var formData = {
+            title: $('#addTitle').val(),
+            amount: $('#addAmount').val(),
+            date: $('#addDate').val(),
+            comment: $('#addComment').val(),
+            category_id: $('#addCategory').val(),
+
+        };
+
+        var type = "POST";
+        var url = '/create';
+
+        //when is connection
+        if (Offline.state === 'up') {
+
+            if (syncData.length > 0) {
+                formData['syncData'] = syncData;
+            }
+            $.ajax({
+                type: type,
+                url: url,
+                data: formData,
+                dataType: 'json',
+                success: function (data) {
+                    //clear sync array after success added
+                    syncData = [];
+
+                    //set all payment data after init for offline mode
+                    window.sessionStorage.setItem("allPaymentsForOffline", JSON.stringify(data.allPaymentsForOffline));
+
+                    //client side rendering
+                    $('#paymentList').html(generatePaymentList(data.payments));
+                    $('#allMonthJs').html(generateChart(data.allMonth));
+                    $('#allMonthCategoryJs').html(generateChart(data.allMonth));
+                    $('#totalNumber').html(data.filteredAmount);
+                    $('#closePopUp').click();
+                    initChart();
+
+                },
+                error: function (data) {
+                    console.log('Error:', data);
+                }
+            });
+        }
+
+        //when not connection
+        if (Offline.state === 'down') {
+            //get saved info for processing data - for offline
+            var data = JSON.parse(window.sessionStorage.getItem("allPaymentsForOffline"));
+
+            data.push(formData);
+            //save in session after add obj
+            window.sessionStorage.setItem("allPaymentsForOffline", JSON.stringify(data));
+
+            //encoding data after save
+            data = JSON.parse(window.sessionStorage.getItem("allPaymentsForOffline"));
+
+            //save new obj another array for sync to server
+            syncData.push(formData);
+
+            var obj = countDataForOfflineMode('', data);
+
+            //client side render
+            $('#paymentList').html(generatePaymentList(obj['filteredData']));
+            $('#totalNumber').html(obj['filteredDataTotalAmount']);
+            $('#allMonthJs').html(generateChart(obj['filteredDateForCategoryChart']));
+            $('#closePopUp').click();
+            initChart();
+        }
+        return false;
+    });
 
 
     $('#search').keyup(function (e) {
@@ -306,7 +355,7 @@ $(function () {
                 dataType: 'json',
                 success: function (data) {
                     //set all payment data after init for offline mode
-                    window.sessionStorage.setItem("allPaymentsForOffline1", JSON.stringify(data.allPaymentsForOffline));
+                    window.sessionStorage.setItem("allPaymentsForOffline", JSON.stringify(data.allPaymentsForOffline));
 
                     //render client side
                     $('#paymentList').html(generatePaymentList(data.payments));
@@ -323,7 +372,7 @@ $(function () {
         //when not connection
         if (Offline.state === 'down') {
             //get saved info for processing data - for offline
-            var data = JSON.parse(window.sessionStorage.getItem("allPaymentsForOffline1"));
+            var data = JSON.parse(window.sessionStorage.getItem("allPaymentsForOffline"));
             var obj = countDataForOfflineMode(formData, data);
 
             //client side render
@@ -344,6 +393,13 @@ $(function () {
 
     //init after site load
     $('#search').keyup();
+
+    //event if exist sync data for server
+    $(window).click(function (e) {
+        if (Offline.state === 'up' && syncData.length > 0) {
+            $('#createPayment').click();
+        }
+    });
 
     //running events for binding
     var inputJs = $('.inputJS');

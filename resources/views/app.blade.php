@@ -1,14 +1,9 @@
 <!DOCTYPE html>
 <html lang="ka">
-
 @include('_partials.head')
-
 <body>
-
 @include('_partials.modals')
-
 @include('_partials.header')
-
 <main>
     <div class="container">
         <!--    filters block-->
@@ -48,6 +43,7 @@
                 <input type="number" class="inputJS" id="amountTo" placeholder="to"/>
             </div>
         </section>
+
         {{--{{dd($allMonth)}}--}}
         <section class="content">
             <h3><span id="countPayment">{{count($allPayment)}}</span> records found</h3>
@@ -80,21 +76,21 @@
             <div class="list list--chart">
                 <div class="list--chart--title">Payments per date</div>
                 <div class="columns-container" id="allMonthJs">
-                    @foreach($allMonth as $key=>$month)
-                        <div class="column" data-percent="{{$month}}" data-index="{{$key}}">
+                    @foreach($allMonth as $month=>$percent)
+                        <div class="column" data-percent="{{$percent}}" data-index="{{$month}}">
                             <div class="date">
-                                {{date('M', mktime(0, 0, 0, $key, 10))}}</div>
-                            <div class="percent">{{number_format($month, 2)}}</div>
+                                {{date('M', mktime(0, 0, 0, $month, 10))}}</div>
+                            <div class="percent">{{number_format($percent, 2)}}</div>
                         </div>
                     @endforeach
                 </div>
                 <div class="list--chart--title">Payments per category</div>
                 <div class="columns-container" id="allMonthCategoryJs">
-                    @foreach($allMonth_category as $key=>$month)
-                        <div class="column" data-percent="{{$month}}" data-index="{{$key}}">
+                    @foreach($allMonth_category as $month=>$percent)
+                        <div class="column" data-percent="{{$percent}}" data-index="{{$month}}">
                             <div class="date">
-                                {{date('M', mktime(0, 0, 0, $key, 10))}}</div>
-                            <div class="percent">{{number_format($month, 2)}}</div>
+                                {{date('M', mktime(0, 0, 0, $month, 10))}}</div>
+                            <div class="percent">{{number_format($percent, 2)}}</div>
                         </div>
                     @endforeach
                 </div>
@@ -102,11 +98,7 @@
         </section>
     </div>
 </main>
-
 @include('_partials.footer')
-
 </body>
-
 <script src="./js/app.js"></script>
-
 </html>

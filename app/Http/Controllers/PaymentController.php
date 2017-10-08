@@ -13,38 +13,52 @@ class PaymentController extends Controller
     public function index()
     {
         $data['categories'] = DB::table('categories')->get();
-        $data['allPayment'] = $this->getAllPayment('', '', '', '', '', '')['payments'];
-        $data['allMonth'] = $this->getAllPayment('', '', '', '', '', '')['allMonth'];
-        $data['allMonth_category'] = $this->getAllPayment('', '', '', '', '', '')['allMonth_category'];
-        $data['sumPayments'] = $this->getAllPayment('', '', '', '', '', '')['filteredAmount'];
+        $data['allPayment'] = $this->getAllPayment()['payments'];
+        $data['allMonth'] = $this->getAllPayment()['allMonth'];
+        $data['allMonth_category'] = $this->getAllPayment()['allMonth_category'];
+        $data['sumPayments'] = $this->getAllPayment()['filteredAmount'];
         return view('app', $data);
     }
 
+    public function syncData($syncData)
+    {
+        foreach ($syncData as $item) {
+            $item['date'] = Carbon::parse($item['date']);
+            $payment = Payment::create($item);
+        }
+    }
 
     public function create(Request $request)
     {
-        $request['date'] = Carbon::parse($request['date']);
-        $payment = Payment::create($request->all());
 
-        return Response::json($this->getAllPayment('', '', '', '', '', ''));
+        if (count($request['syncData']) > 0) {
+            $this->syncData($request['syncData']);
+        } else {
+            $newPayment['title'] = $request['title'];
+            $newPayment['amount'] = $request['amount'];
+            $newPayment['comment'] = $request['comment'];
+            $newPayment['category_id'] = $request['category_id'];
+            $newPayment['date'] = Carbon::parse($request['date']);
+            $payment = Payment::create($newPayment);
+        }
+
+        return Response::json($this->getAllPayment());
     }
 
-    public function getAllPayment($searchValue, $categoryIds, $dateFrom, $dateTo, $amountFrom, $amountTo)
+    public function getAllPayment($searchValue = '', $categoryIds = '', $dateFrom = '', $dateTo = '', $amountFrom = '', $amountTo = '')
     {
 
         $sumPayments = DB::table('payments')->sum('amount');
-
         $query = DB::table('payments')->join('categories', 'categories.id', '=', 'payments.category_id')
             ->select('*',
                 'categories.title as category_title',
                 'payments.title as title'
             );
-
         $queryForAllPayments = $query;
         $data['allPaymentsForOffline'] = $queryForAllPayments->get();
-
         $queryForAmount = DB::table('payments');
 
+//        query builder for filters ------------------------------
         if ($searchValue) {
             $query->where('payments.title', 'LIKE', "%$searchValue%");
             $queryForAmount->where('payments.title', 'LIKE', "%$searchValue%");
@@ -88,6 +102,7 @@ class PaymentController extends Controller
         $allMonth = [];
         $allMonth_category = [];
 
+//        generate data for charts ----------------------------
         for ($i = 1; $i <= 12; $i++) {
 
             if ($categoryIds) {
@@ -118,6 +133,8 @@ class PaymentController extends Controller
             $allMonth[$i] = ($sumMonth / $sumPayments) * 100;
             $allMonth_category[$i] = ($sumMonth_Category / $sumPayments) * 100;
         }
+
+//        collect all info
         $data['allMonth'] = $allMonth;
         $data['allMonth_category'] = $allMonth_category;
         $data['sumPayments'] = $sumPayments;
